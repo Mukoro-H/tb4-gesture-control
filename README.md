@@ -5,7 +5,6 @@
 Webcam laptop → OpenCV → **MediaPipe Gesture Recognizer** → ROS 2 Humble → TurtleBot 4 trong Gazebo (Ignition Fortress).
 Robot chào lại khi vẫy tay, chọn hành vi bằng 1/2 ngón tay, chỉ chạy sau khi giơ ngón cái xác nhận, dừng ngay khi xòe bàn tay, hủy khi nắm tay, và tự dừng khi mất tín hiệu điều khiển.
 - MSSV: 23020747
-- 🎬 Video demo: `<link Google Drive>`
 
 ---
 
