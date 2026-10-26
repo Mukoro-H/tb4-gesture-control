@@ -1,0 +1,53 @@
+gesture_recognition_node:
+  ros__parameters:
+    camera_index: 0            # /dev/videoN of the webcam
+    frame_width: 640
+    frame_height: 480
+    mirror: true               # flip horizontally like a mirror
+    model_path: ""             # empty = share/turtlebot4_gesture_control/models/gesture_recognizer.task
+    num_hands: 1
+    min_detection_confidence: 0.6
+    # --- anti-noise filter ---
+    min_score: 0.6             # gestures below this confidence count as "None"
+    stable_frames: 6           # consecutive frames needed for a normal gesture
+    stop_frames: 3             # Open_Palm / Closed_Fist react faster (safety)
+    none_frames: 8             # frames without a hand before "None"
+    # --- wave detection (Open_Palm swinging left-right) ---
+    wave_enabled: true
+    wave_window: 1.5           # seconds of palm trajectory analysed
+    wave_amplitude: 0.06       # min swing, fraction of image width
+    wave_swings: 3             # strokes needed (L-R-L)
+    gesture_topic: /detected_gesture
+    state_topic: /behavior_state
+
+robot_behavior_node:
+  ros__parameters:
+    gesture_topic: /detected_gesture
+    cmd_vel_topic: /cmd_vel
+    state_topic: /behavior_state
+    scan_topic: /scan
+    base_frame: base_link
+    control_rate: 20.0         # Hz; Create 3 needs a steady cmd_vel stream
+    signal_timeout: 1.0        # s without /detected_gesture -> stop
+    cooldown: 1.0              # s before the same command can fire again
+    wave_requires_confirm: false
+    max_linear: 0.3
+    max_angular: 1.5
+    # Wave -> greeting: turn left/right
+    greet_angular_speed: 1.2   # rad/s
+    greet_angle: 0.6           # rad (~34 deg) each side
+    greet_repeats: 2
+    # Pointing_Up -> forward/backward x4
+    fb_speed: 0.2              # m/s
+    fb_distance: 0.4           # m each way
+    fb_repeats: 4
+    fb_pause: 0.4
+    # Victory -> circle
+    circle_speed: 0.2          # m/s
+    circle_radius: 0.5         # m  (w = v / r = 0.4 rad/s)
+    circle_laps: 1.0
+    circle_direction: 1        # 1 = counter-clockwise, -1 = clockwise
+    # lidar guard (set obstacle_stop_distance: 0.0 to disable)
+    obstacle_stop_distance: 0.30
+    obstacle_ignore_below: 0.18
+    obstacle_half_angle_deg: 35.0
